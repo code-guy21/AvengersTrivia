@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trivia</title>
+    <!--Reset CSS-->
+    <link rel="stylesheet" href="./assets/css/reset.css">
     <!--Custom CSS-->
     <link rel="stylesheet" href="./assets/css/style.css">
     <!--jQuery-->
@@ -14,7 +16,14 @@
 
 <body>
     <header>header</header>
-    <main>main</main>
+    <main>trivia
+        <p> Time Remaining: <span id="time"></span> seconds</p>
+        <section id="trivia">
+            <p id="question"></p>
+            <ul id="choices"></ul>
+            <button id="start">start</button>
+        </section>
+    </main>
     <footer>footer</footer>
     <script src="./assets/javascript/app.js"></script>
 </body>
