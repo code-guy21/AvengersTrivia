@@ -3,3 +3,8 @@ main {
     width: 100%;
     border: 1px solid black;
 }
+
+#choices {
+    display: flex;
+    flex-direction: column;
+}
