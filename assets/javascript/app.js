@@ -1,13 +1,9 @@
 $(document).ready(() => {
 
 	let timer;
-	let time_rem = 10;
-	let current = -1;
-	let stats = {
-		correct: 0,
-		incorrect: 0,
-		unanswered: 0,
-	}
+	let time_rem;
+	let current;
+	let stats;
 
 	const trivia = [
 		{
@@ -44,12 +40,13 @@ $(document).ready(() => {
 	
 	const checkTime = () => {
 		time_rem--;
+
 		if(time_rem === 0){
 			clearInterval(timer);
 			$('#question').html('Time is Up!')
 			$('#choices').html('The correction answer was: ' + trivia[current].answer);
 			stats.unanswered++;
-			setTimeout(loadQuestion, 3000);
+			setTimeout(loadQuestion, 2000);
 		}
 
 		$('#time').text(time_rem);
@@ -63,15 +60,10 @@ $(document).ready(() => {
 
 			$("#choices").html(Object.entries(stats).map((stat) => {
 				let name = stat[0][0].toUpperCase() + stat[0].slice(1);
+
 				return '<div>' + name + ': ' + stat[1] +'</div>'
 			}))
 
-			current = -1;
-			stats = {
-				correct: 0,
-				incorrect: 0,
-				unanswered: 0,
-			}
 			$('#start').show();
 		}else{
 
@@ -111,10 +103,21 @@ $(document).ready(() => {
 	$('#remaining').hide();
 
 	$('#start').click(() => {
-		$('#start').hide();
+		current = -1;
+		stats = {
+			correct: 0,
+			incorrect: 0,
+			unanswered: 0,
+		}
+
 		randomize();
+
+		$('#start').hide();
+		
 		$('#remaining').show();
+
 		loadQuestion();
+		
 	});
 
 	$(document).on( 'click' ,'.choice', checkAnswer);

@@ -1,0 +1,10 @@
+/* font converted using font-converter.net. thank you! */
+@font-face {
+  font-family: "Disassembled";
+  src: 
+    url("./Disassembled.ttf") format("truetype"), /* Safari, Android, iOS */
+    url("./Disassembled.woff") format("woff"), /* Modern Browsers */
+    url("./Disassembled.woff2") format("woff2"); /* Modern Browsers */
+  font-weight: normal;
+  font-style: normal;
+}
