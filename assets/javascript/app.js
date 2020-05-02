@@ -3,6 +3,7 @@ $(document).ready(() => {
 	let timer;
 	let time_rem = 10;
 	let current = -1;
+	let correct = 0;
 
 	const trivia = [
 		{
@@ -24,7 +25,7 @@ $(document).ready(() => {
 		{
 			question: 'How many Infinity Stones exist in the MCU?',
 			choices: ['6', '8', '5', '4'],
-			answer: 6,
+			answer: '6',
 		},
 	];
 	
@@ -54,7 +55,9 @@ $(document).ready(() => {
 
 		if(current === trivia.length){
 			console.log('game over!')
+			console.log(correct)
 			current = -1;
+			correct = 0;
 			$('#start').show();
 		}else{
 
@@ -65,6 +68,7 @@ $(document).ready(() => {
 			$('#time').text(10);
 
 			$('#question').text(trivia[current].question)
+
 			trivia[current].choices.forEach((choice) => {
 			$('#choices').append('<button class="choice">' + choice + '</button>')})
 		}
@@ -73,17 +77,25 @@ $(document).ready(() => {
 
 	function checkAnswer () {
 		clearInterval(timer);
-		$('#question').html('You answered!')
-		$('#choices').html('The correct answer was: ' + trivia[current].answer);
+
+		if($(this).text() === trivia[current].answer){
+			correct++;
+			$('#question').html('Correct!')
+			$('#choices').html('The correct answer was: ' + trivia[current].answer);
+		}else{
+			$('#question').html('Wrong!!')
+			$('#choices').html('The correct answer was: ' + trivia[current].answer);
+		}
+
 		setTimeout(loadQuestion, 3000);
 	}
 	
 
 	$('#remaining').hide();
-	randomize();
 
 	$('#start').click(() => {
 		$('#start').hide();
+		randomize();
 		$('#remaining').show();
 		loadQuestion();
 	});
