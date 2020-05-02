@@ -3,7 +3,11 @@ $(document).ready(() => {
 	let timer;
 	let time_rem = 10;
 	let current = -1;
-	let correct = 0;
+	let stats = {
+		correct: 0,
+		incorrect: 0,
+		unanswered: 0,
+	}
 
 	const trivia = [
 		{
@@ -44,6 +48,7 @@ $(document).ready(() => {
 			clearInterval(timer);
 			$('#question').html('Time is Up!')
 			$('#choices').html('The correction answer was: ' + trivia[current].answer);
+			stats.unanswered++;
 			setTimeout(loadQuestion, 3000);
 		}
 
@@ -54,23 +59,34 @@ $(document).ready(() => {
 		current++;
 
 		if(current === trivia.length){
-			console.log('game over!')
-			console.log(correct)
+			$("#question").text('Game over, here are your stats')
+
+			$("#choices").html(Object.entries(stats).map((stat) => {
+				let name = stat[0][0].toUpperCase() + stat[0].slice(1);
+				return '<div>' + name + ': ' + stat[1] +'</div>'
+			}))
+
 			current = -1;
-			correct = 0;
+			stats = {
+				correct: 0,
+				incorrect: 0,
+				unanswered: 0,
+			}
 			$('#start').show();
 		}else{
 
 			$('#choices').empty();
 
-			time_rem = 10;
-			timer = setInterval(checkTime, 1000);
 			$('#time').text(10);
 
 			$('#question').text(trivia[current].question)
 
-			trivia[current].choices.forEach((choice) => {
-			$('#choices').append('<button class="choice">' + choice + '</button>')})
+			$('#choices').html( trivia[current].choices.map((choice) => {
+				return '<button class="choice">' + choice + '</button>'
+			}))  
+
+			time_rem = 10;
+			timer = setInterval(checkTime, 1000);
 		}
 		
 	}
@@ -79,12 +95,13 @@ $(document).ready(() => {
 		clearInterval(timer);
 
 		if($(this).text() === trivia[current].answer){
-			correct++;
+			stats.correct++;
 			$('#question').html('Correct!')
 			$('#choices').html('The correct answer was: ' + trivia[current].answer);
 		}else{
 			$('#question').html('Wrong!!')
 			$('#choices').html('The correct answer was: ' + trivia[current].answer);
+			stats.incorrect++;
 		}
 
 		setTimeout(loadQuestion, 3000);
