@@ -2,7 +2,7 @@ $(document).ready(() => {
 
 	let timer;
 	let time_rem = 10;
-	let current = 0;
+	let current = -1;
 
 	const trivia = [
 		{
@@ -40,23 +40,44 @@ $(document).ready(() => {
 	const checkTime = () => {
 		time_rem--;
 		if(time_rem === 0){
-			console.log('time is up')
 			clearInterval(timer);
-		}else{
-			$('#time').text(time_rem);
+			$('#question').html('Time is Up!')
+			$('#choices').html('The correction answer was: ' + trivia[current].answer);
+			setTimeout(loadQuestion, 3000);
 		}
+
+		$('#time').text(time_rem);
+	}
+
+	const loadQuestion = () => {
+		current++;
+
+		if(current === trivia.length){
+			console.log('game over!')
+			current = -1;
+			$('#start').show();
+		}else{
+
+			$('#choices').empty();
+
+			time_rem = 10;
+			timer = setInterval(checkTime, 1000);
+			$('#time').text(10);
+
+			$('#question').text(trivia[current].question)
+			trivia[current].choices.forEach((choice) => {
+			$('#choices').append('<button class="choice">' + choice + '</button>')})
+		}
+		
 	}
 
 	function checkAnswer () {
-		console.log($(this).text())
+		clearInterval(timer);
+		$('#question').html('You answered!')
+		$('#choices').html('The correct answer was: ' + trivia[current].answer);
+		setTimeout(loadQuestion, 3000);
 	}
 	
-	const displayQuestion =() => {
-		$('#question').text(trivia[current].question)
-		trivia[current].choices.forEach((choice) => {
-			$('#choices').append('<button class="choice">' + choice + '</button>')
-		})
-	}
 
 	$('#remaining').hide();
 	randomize();
@@ -64,11 +85,8 @@ $(document).ready(() => {
 	$('#start').click(() => {
 		$('#start').hide();
 		$('#remaining').show();
-
-		timer = setInterval(checkTime, 1000);
-
-		displayQuestion();
+		loadQuestion();
 	});
 
-	$(document).on( 'load' ,'.choice', checkAnswer);
+	$(document).on( 'click' ,'.choice', checkAnswer);
 });
