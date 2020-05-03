@@ -21,23 +21,27 @@ main {
     border-radius: 10px;
     padding: 50px;
     box-sizing: border-box;
-    justify-content: space-between;
    
+}
+
+main > * {
+    margin-bottom: 30px;
 }
 
 #choices {
     display: flex;
     flex-direction: column;
-    width: 30%
+    width: 40%
 }
 
-.choice {
+button {
     padding: 20px;
     margin-bottom: 10px;
     border-radius: 10px;
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
+    font-size: 25px;
+    font-family: 'Avengers', sans-serif;
     font-weight: 500;
+    background: white;
 }
 
 #title {
@@ -46,11 +50,15 @@ main {
     color: white;
 }
 
-#question {
+.result {
     font-family: 'Roboto', sans-serif;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 900;
-   
+    text-align: center;
+}
+
+#question {
+    font-size: 30px;
 }
 
 #remaining {
@@ -62,4 +70,36 @@ main {
     color: red;
 }
 
+.answer {
+    color: rgb(25, 199, 63);
+}
+
+@media screen and (max-width : 700px){
+    #title {
+        font-size: 30px;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    button {
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+    .result,#question {
+        font-size: 20px;
+    }
+
+    #remaining {
+        font-size: 10px;
+    }
+
+    #choices {
+        width: 80%
+    }
+}
 
