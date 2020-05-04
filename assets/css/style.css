@@ -84,6 +84,10 @@ img {
     justify-content: center;
 }
 
+#start {
+    width: 20%;
+}
+
 
 @media screen and (max-width : 700px){
     #title {
@@ -104,16 +108,20 @@ img {
     }
 
     .result,#question {
-        font-size: 20px;
+        font-size: 17px;
     }
 
     #remaining {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     img {
         height: 70%;
         width: 70%;
+    }
+
+    #start {
+        width: 60%;
     }
 }
 
