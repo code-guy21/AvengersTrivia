@@ -181,11 +181,8 @@ $(document).ready(() => {
 			//notify user their answer is correct
 			$('#question').text('Correct')
 
-			//hide choices from previous question
-			$('#choices').hide();
-
 			//display image for correct answer
-			$('main').append($('<img src="'+ trivia[current].img+ '">'));
+			$('#choices').html($('<img src="'+ trivia[current].img+ '">'));
 		}else{
 
 			//notify user their answer is wrong
