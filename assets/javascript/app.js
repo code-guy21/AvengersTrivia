@@ -1,231 +1,239 @@
 $(document).ready(() => {
+  //variables
+  let timer;
+  let time_rem;
+  let current;
+  let stats;
 
-	//variables
-	let timer;
-	let time_rem;
-	let current;
-	let stats;
+  //questions array
+  const trivia = [
+    {
+      question: "How many Infinity Stones exist in the MCU?",
+      choices: ["6", "8", "5", "4"],
+      answer: "6",
+      img: "./assets/images/thanos.gif",
+    },
+    {
+      question: "Captain America's shield is made from which metal?",
+      choices: ["Adamantium", "Strontium", "Barium", "Vibranium"],
+      answer: "Vibranium",
+      img: "./assets/images/captainamerica.gif",
+    },
+    {
+      question: "What Type of Doctor is Stephen Strange?",
+      choices: [
+        "Neurosurgeon",
+        "Pediatrician",
+        "Plastic Surgeon",
+        "Cardiologist",
+      ],
+      answer: "Neurosurgeon",
+      img: "./assets/images/doctorstrange.gif",
+    },
+    {
+      question: "What Does May Call Spider-Man's Heightened Senses?",
+      choices: [
+        "The Tingle",
+        "Spidey Sense",
+        "That Special Thing",
+        "Peter Tingle",
+      ],
+      answer: "Peter Tingle",
+      img: "./assets/images/spiderman.gif",
+    },
+    {
+      question: "What Is The Name Of Star-Lord's Ship?",
+      choices: ["Walrus", "Milano", "Sovereign", "Simpson"],
+      answer: "Milano",
+      img: "./assets/images/peterquill.gif",
+    },
+    {
+      question: "Who are the shape-shifting aliens in Captain Marvel?",
+      choices: ["Titans", "Kree", "Skrulls", "Xandarians"],
+      answer: "Skrulls",
+      img: "./assets/images/captainmarvel.gif",
+    },
+    {
+      question: "T'Challa is the ruler of what nation?",
+      choices: ["Kenya", "Sokovia", "Wakanda", "Nigeria"],
+      answer: "Wakanda",
+      img: "./assets/images/blackpanther.gif",
+    },
+    {
+      question: "What radiation turned Bruce Banner into The Hulk?",
+      choices: ["Infrared", "Gamma", "X-ray", "Ultraviolet"],
+      answer: "Gamma",
+      img: "./assets/images/hulk.gif",
+    },
+    {
+      question: "What particles allow Ant-Man to grow and shrink in size?",
+      choices: ["Iridium", "Palladium", "Uru", "Pym"],
+      answer: "Pym",
+      img: "./assets/images/antman.gif",
+    },
+    {
+      question: 'Thanos tells Thor, "You should have gone for the ___"?',
+      choices: ["Hand", "Leg", "Head", "Chest"],
+      answer: "Head",
+      img: "./assets/images/thor.gif",
+    },
+  ];
 
-	//questions array
-	const trivia = [
-	
-		{
-			question: 'How many Infinity Stones exist in the MCU?',
-			choices: ['6', '8', '5', '4'],
-			answer: '6',
-			img: './assets/images/infinity.png'
-		},
-		{
-			question: 'Captain America\'s shield is made from which metal?',
-			choices: ['Adamantium', 'Strontium', 'Barium', 'Vibranium'],
-			answer: 'Vibranium',
-			img: './assets/images/sheild.jpg'
-		},
-		{
-			question: 'What Type of Doctor is Stephen Strange?',
-			choices: ['Neurosurgeon', 'Pediatrician', 'Plastic Surgeon', 'Cardiologist'],
-			answer: 'Neurosurgeon',
-			img: './assets/images/doctorstrange.jpg'
-		},
-		{
-			question: 'What Does May Call Spider-Man\'s Heightened Senses?',
-			choices: ['The Tingle', 'Spidey Sense', 'That Special Thing', 'Peter Tingle'],
-			answer: 'Peter Tingle',
-			img: './assets/images/peterparker.jpeg'
-		},
-		{
-			question: 'What Is The Name Of Star-Lord\'s Ship?',
-			choices: ['Walrus', 'Milano', 'Sovereign', 'Simpson'],
-			answer: 'Milano',
-			img: './assets/images/milano.jpg'
-		},
-		{
-			question: 'Who are the shape-shifting aliens in Captain Marvel?',
-			choices: ['Titans', 'Kree', 'Skrulls', 'Xandarians'],
-			answer: 'Skrulls',
-			img: './assets/images/skrull.jpg'
+  //randomizes the order of the questions
+  const randomize = () => {
+    for (let i = trivia.length - 1; i > 0; i--) {
+      let randIndex = Math.floor(Math.random() * i);
+      let original = trivia[i];
+      trivia[i] = { ...trivia[randIndex] };
+      trivia[randIndex] = { ...original };
+    }
+  };
 
-		},
-		{
-			question: 'T\'Challa is the ruler of what nation?',
-			choices: ['Kenya', 'Sokovia', 'Wakanda', 'Nigeria'],
-			answer: 'Wakanda',
-			img: './assets/images/wakanda.jpg'
-		},
-		{
-			question: 'What radiation turned Bruce Banner into The Hulk?',
-			choices: ['Infrared', 'Gamma', 'X-ray', 'Ultraviolet'],
-			answer: 'Gamma',
-			img: './assets/images/hulk.jpg'
-		},
-		{
-			question: 'What particles allow Ant-Man to grow and shrink in size?',
-			choices: ['Iridium', 'Palladium', 'Uru', 'Pym'],
-			answer: 'Pym',
-			img: './assets/images/pym.png'
-		},
-		{
-			question: 'Thanos tells Thor, "You should have gone for the ___"?',
-			choices: ['Hand', 'Leg', 'Head', 'Chest'],
-			answer: 'Head',
-			img: './assets/images/thanos.jpg'
+  //every time a second expires run this function
+  const checkTime = () => {
+    //decrease amount of time left
+    time_rem--;
 
-		},
-		
-	];
-	
-	//randomizes the order of the questions
-	const randomize = () => {
-		for (let i = trivia.length - 1; i > 0; i--) {
-			let randIndex = Math.floor(Math.random() * i);
-			let original = trivia[i];
-			trivia[i] = { ...trivia[randIndex] };
-			trivia[randIndex] = { ...original };
-		}
-	};
-	
-	//every time a second expires run this function
-	const checkTime = () => {
+    //check if time has ran out
+    if (time_rem === 0) {
+      //clear the timer
+      clearInterval(timer);
 
-		//decrease amount of time left
-		time_rem--;
+      //notify user has ran out of time
+      $("#question").text("Time is Up!");
 
-		//check if time has ran out
-		if(time_rem === 0){
-			//clear the timer
-			clearInterval(timer);
+      //display the correct answer
+      $("#choices").html(
+        '<div class="result">The correct answer was: <span class="answer">' +
+          trivia[current].answer +
+          "</span></div>"
+      );
 
-			//notify user has ran out of time
-			$('#question').text('Time is Up!')
+      //increase the amount of questions that have gone unanswered
+      stats.unanswered++;
 
-			//display the correct answer
-			$('#choices').html('<div class="result">The correct answer was: <span class="answer">' + trivia[current].answer+'</span></div>');
+      //load next question after 3 seconds
+      setTimeout(loadQuestion, 3000);
+    }
 
-			//increase the amount of questions that have gone unanswered
-			stats.unanswered++;
+    //display time left to answer question
+    $("#time").text(time_rem);
+  };
 
-			//load next question after 3 seconds
-			setTimeout(loadQuestion, 3000);
-		}
+  //loads the next trivia question
+  const loadQuestion = () => {
+    //removes the image for previous question if it exists
+    $("img").remove();
 
-		//display time left to answer question
-		$('#time').text(time_rem);
-	}
+    //increase index for trivia array
+    current++;
 
-	//loads the next trivia question
-	const loadQuestion = () => {
+    //check if we've run out questions
+    if (current === trivia.length) {
+      //notify user the game is over
+      $("#question").text("Game Over");
 
-		//removes the image for previous question if it exists
-		$('img').remove();
+      //add game stats page
+      $("#choices").html(
+        Object.entries(stats).map((stat) => {
+          let name = stat[0][0].toUpperCase() + stat[0].slice(1);
 
-		//increase index for trivia array
-		current++;
+          return '<div class="result">' + name + ": " + stat[1] + "</div>";
+        })
+      );
 
-		//check if we've run out questions
-		if(current === trivia.length){
+      //display the stats
+      $("#choices").show();
 
-			//notify user the game is over
-			$("#question").text('Game Over')
+      //display start button
+      $("#start").show();
+    } else {
+      //clear the choices available for previous question
+      $("#choices").empty();
 
-			//add game stats page
-			$("#choices").html(Object.entries(stats).map((stat) => {
-				let name = stat[0][0].toUpperCase() + stat[0].slice(1);
+      //display new time
+      $("#time").text(10);
 
-				return '<div class="result">' + name + ': ' + stat[1] +'</div>'
-			}))
+      //display new question
+      $("#question").text(trivia[current].question);
 
-			//display the stats
-			$('#choices').show();
+      //add new choices to page
+      $("#choices").html(
+        trivia[current].choices.map((choice) => {
+          return '<button class="choice">' + choice + "</button>";
+        })
+      );
 
-			//display start button
-			$('#start').show();
+      //display choices
+      $("#choices").show();
 
-		}else{
+      //reset time remaining
+      time_rem = 10;
+      //start counter
+      timer = setInterval(checkTime, 1000);
+    }
+  };
 
-			//clear the choices available for previous question
-			$('#choices').empty();
+  //handles answer selection for user
+  function checkAnswer() {
+    //stop the timer
+    clearInterval(timer);
 
-			//display new time
-			$('#time').text(10);
+    //check user clicked the correct answer
+    if ($(this).text() === trivia[current].answer) {
+      //increase total for questions answered correctly
+      stats.correct++;
 
-			//display new question
-			$('#question').text(trivia[current].question)
+      //notify user their answer is correct
+      $("#question").text("Correct");
 
-			//add new choices to page
-			$('#choices').html( trivia[current].choices.map((choice) => {
-				return '<button class="choice">' + choice + '</button>'
-			}))  
+      //display image for correct answer
+      $("#choices").html($('<img src="' + trivia[current].img + '">'));
+    } else {
+      //notify user their answer is wrong
+      $("#question").text("Wrong");
 
-			//display choices
-			$('#choices').show();
+      //display the correct answer
+      $("#choices").html(
+        '<div class="result">The correct answer was: <span class="answer">' +
+          trivia[current].answer +
+          "</span></div>"
+      );
 
-			//reset time remaining
-			time_rem = 10;
-			//start counter
-			timer = setInterval(checkTime, 1000);
-		}
-		
-	}
+      //increase total for questions answered incorrectly
+      stats.incorrect++;
+    }
 
-	//handles answer selection for user
-	function checkAnswer () {
+    //load next question after 3.5 seconds
+    setTimeout(loadQuestion, 3500);
+  }
 
-		//stop the timer
-		clearInterval(timer);
+  //intially hide timer countdown
+  $("#remaining").hide();
 
-		//check user clicked the correct answer
-		if($(this).text() === trivia[current].answer){
-			//increase total for questions answered correctly
-			stats.correct++;
+  //start button listener
+  $("#start").click(() => {
+    //reset variables
+    current = -1;
+    stats = {
+      correct: 0,
+      incorrect: 0,
+      unanswered: 0,
+    };
 
-			//notify user their answer is correct
-			$('#question').text('Correct')
+    //randomize order of questions
+    randomize();
 
-			//display image for correct answer
-			$('#choices').html($('<img src="'+ trivia[current].img+ '">'));
-		}else{
+    //hide start button
+    $("#start").hide();
 
-			//notify user their answer is wrong
-			$('#question').text('Wrong')
+    //display time remaining
+    $("#remaining").show();
 
-			//display the correct answer
-			$('#choices').html('<div class="result">The correct answer was: <span class="answer">' + trivia[current].answer +'</span></div>');
+    //load first question
+    loadQuestion();
+  });
 
-			//increase total for questions answered incorrectly
-			stats.incorrect++;
-		}
-
-		//load next question after 3 seconds
-		setTimeout(loadQuestion, 3000);
-	}
-	
-	//intially hide timer countdown
-	$('#remaining').hide();
-
-	//start button listener
-	$('#start').click(() => {
-
-		//reset variables
-		current = -1;
-		stats = {
-			correct: 0,
-			incorrect: 0,
-			unanswered: 0,
-		}
-
-		//randomize order of questions
-		randomize();
-
-		//hide start button
-		$('#start').hide();
-		
-		//display time remaining
-		$('#remaining').show();
-
-		//load first question
-		loadQuestion();
-	});
-
-	//adds click listener for choice buttons
-	$(document).on( 'click' ,'.choice', checkAnswer);
+  //adds click listener for choice buttons
+  $(document).on("click", ".choice", checkAnswer);
 });
