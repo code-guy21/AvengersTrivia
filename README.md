@@ -1,4 +1,4 @@
-# TriviaGame
+# Avengers Trivia
 
 This is a Trivia style game, themed around The Avengers.
 
